@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS public.tenants (
-                                              id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     tenant_id VARCHAR(100) NOT NULL UNIQUE,
     schema_name VARCHAR(100) NOT NULL UNIQUE,
     name VARCHAR(255) NOT NULL,

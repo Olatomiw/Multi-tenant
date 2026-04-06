@@ -11,6 +11,8 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Service
 public class TenantService {
@@ -25,8 +27,8 @@ public class TenantService {
 
     @Transactional
     public void createTenant(String tenantId, String schemaName) {
-        if (!tenantId.matches("[a-zA-Z0-9_]+")) {
-            throw new IllegalArgumentException("Invalid tenant ID");
+        if (!schemaName.matches("[a-zA-Z0-9_]+")) {
+            throw new IllegalArgumentException("Invalid SchemaName");
         }
         try(Connection connection = dataSource.getConnection();
         Statement statement = connection.createStatement()){
@@ -37,14 +39,18 @@ public class TenantService {
 
         Flyway flyway = Flyway.configure()
                 .dataSource(dataSource)
-                .locations("classpath:db/migration/tenant")
+                .locations("classpath:db/migration/tenants")
                 .schemas(schemaName)
+                .baselineOnMigrate(true)
                 .load();
         flyway.migrate();
 
         Tenant tenant = new Tenant();
+        tenant.setId(UUID.randomUUID());
+        tenant.setTenantId(tenantId);
         tenant.setSchemaName(schemaName);
-        tenant.setDatabaseName(tenantId);
+        tenant.setName(tenantId);
+        tenant.setCreatedAt(LocalDateTime.now());
         tenant.setStatus(Status.ACTIVE);
 
         tenantRepository.save(tenant);

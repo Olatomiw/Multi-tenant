@@ -14,8 +14,8 @@ public class DefaultController {
     }
 
     @GetMapping("/hello")
-    public String hello(@RequestHeader String X_Tenant_Id, @RequestParam String name){
-        tenantService.createTenant(X_Tenant_Id,name + X_Tenant_Id);
+    public String hello(@RequestHeader("X-Tenant-Id") String header, @RequestParam String name){
+        tenantService.createTenant(header, name);
         return "Hello World";
     }
 }

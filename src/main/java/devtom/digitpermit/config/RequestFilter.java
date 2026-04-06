@@ -12,7 +12,7 @@ import java.io.IOException;
 @Component
 public class RequestFilter extends OncePerRequestFilter {
 
-    private static final String TENANT_ID = "X-Tenant-Id:";
+    private static final String TENANT_ID = "X-Tenant-Id";
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
