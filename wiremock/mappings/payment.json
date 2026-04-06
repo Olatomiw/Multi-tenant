@@ -1,0 +1,28 @@
+{
+  "mappings": [
+    {
+      "request": {
+        "method": "POST",
+        "urlPattern": "/payments/verify"
+      },
+      "response": {
+        "status": 200,
+        "fixedDelayMilliseconds": 3000,
+        "jsonBody": {
+          "id": "1234567890"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "urlPattern": "/payments/verify"
+      },
+      "response": {
+        "status": 503,
+        "fixedDelayMilliseconds": 3000,
+        "jsonBody": {}
+      }
+    }
+  ]
+}
