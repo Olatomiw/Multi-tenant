@@ -35,17 +35,19 @@ resilience4j:
   timelimiter:
     instances:
       permit-service:
-        timeoutDuration: 10s
+        timeoutDuration: 5s
   retry:
     instances:
       permit-service:
         maxAttempts: 3
-        waitDuration: 1000
+        waitDuration: 1000ms
         enableExponentialBackoff: true
         exponentialBackoffMultiplier: 2
 
 
-
+digitpermit:
+  exchange_key: ${EXCHANGE_KEY:digit_permit_exchange}
+  routing_key: ${ROUTING_KEY:digit_permit_routing_key}
 
 management:
   endpoints:
@@ -56,3 +58,6 @@ management:
     health:
       show-details: always
 
+payment:
+  gateway:
+    url: http://localhost:8081/api

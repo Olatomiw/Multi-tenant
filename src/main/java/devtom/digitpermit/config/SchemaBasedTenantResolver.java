@@ -1,6 +1,6 @@
 package devtom.digitpermit.config;
 
-import devtom.digitpermit.TenantContext;
+import devtom.digitpermit.Model.TenantContext;
 import org.hibernate.context.spi.CurrentTenantIdentifierResolver;
 import org.springframework.stereotype.Component;
 

@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS payment_records (
     );
 
 CREATE TABLE IF NOT EXISTS outbox_events (
-                                             id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     aggregate_id UUID NOT NULL,
     aggregate_type VARCHAR(100) NOT NULL,
     event_type VARCHAR(100) NOT NULL,

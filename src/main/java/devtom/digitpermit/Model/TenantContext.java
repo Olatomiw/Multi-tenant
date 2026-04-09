@@ -1,4 +1,4 @@
-package devtom.digitpermit;
+package devtom.digitpermit.Model;
 
 public class TenantContext {
 

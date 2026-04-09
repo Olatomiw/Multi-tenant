@@ -1,6 +1,7 @@
 package devtom.digitpermit.service;
 
 import devtom.digitpermit.Model.Tenant;
+import devtom.digitpermit.config.RabbitMqProducer;
 import devtom.digitpermit.enums.Status;
 import devtom.digitpermit.repository.TenantRepository;
 import org.flywaydb.core.Flyway;
@@ -19,10 +20,12 @@ public class TenantService {
 
     private final DataSource dataSource;
     private final TenantRepository tenantRepository;
+    private final RabbitMqProducer rabbitMqProducer;
 
-    public TenantService(DataSource dataSource, TenantRepository tenantRepository) {
+    public TenantService(DataSource dataSource, TenantRepository tenantRepository, RabbitMqProducer rabbitMqProducer) {
         this.dataSource = dataSource;
         this.tenantRepository = tenantRepository;
+        this.rabbitMqProducer = rabbitMqProducer;
     }
 
     @Transactional
@@ -34,16 +37,29 @@ public class TenantService {
         Statement statement = connection.createStatement()){
             statement.execute("CREATE SCHEMA IF NOT EXISTS " + schemaName);
         }catch (SQLException e){
-            throw new RuntimeException(e);
+            throw new RuntimeException("Failed to create schema: " + schemaName, e);
         }
 
-        Flyway flyway = Flyway.configure()
-                .dataSource(dataSource)
-                .locations("classpath:db/migration/tenants")
-                .schemas(schemaName)
-                .baselineOnMigrate(true)
-                .load();
-        flyway.migrate();
+        try{
+            Flyway flyway = Flyway.configure()
+                    .dataSource(dataSource)
+                    .locations("classpath:db/migration/tenants")
+                    .schemas(schemaName)
+                    .baselineOnMigrate(true)
+                    .load();
+            flyway.migrate();
+
+            rabbitMqProducer.send("Tenant Created in DB: " + tenantId + "schema: " + schemaName);
+
+        }catch (Exception e){
+            try (Connection connection = dataSource.getConnection();
+                 Statement statement = connection.createStatement()) {
+                statement.execute("DROP SCHEMA IF EXISTS " + schemaName + " CASCADE");
+            } catch (SQLException dropException) {
+                throw new RuntimeException("Migration failed and schema cleanup also failed for: " + schemaName, dropException);
+            }
+            throw new RuntimeException("Flyway migration failed for schema: " + schemaName, e);
+        }
 
         Tenant tenant = new Tenant();
         tenant.setId(UUID.randomUUID());

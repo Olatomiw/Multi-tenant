@@ -1,6 +1,6 @@
 package devtom.digitpermit.config;
 
-import devtom.digitpermit.TenantContext;
+import devtom.digitpermit.Model.TenantContext;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

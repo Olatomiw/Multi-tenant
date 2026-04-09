@@ -3,13 +3,17 @@
     {
       "request": {
         "method": "POST",
-        "urlPattern": "/payments/verify"
+        "url": "/api/payments/verify"
       },
       "response": {
         "status": 200,
         "fixedDelayMilliseconds": 3000,
         "jsonBody": {
-          "id": "1234567890"
+          "status": "SUCCESS",
+          "message": "Payment verified"
+        },
+        "headers": {
+          "Content-Type": "application/json"
         }
       }
     },
@@ -21,7 +25,10 @@
       "response": {
         "status": 503,
         "fixedDelayMilliseconds": 3000,
-        "jsonBody": {}
+        "jsonBody": {},
+        "headers": {
+          "Content-Type": "application/json"
+        }
       }
     }
   ]
