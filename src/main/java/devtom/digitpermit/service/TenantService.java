@@ -1,7 +1,7 @@
 package devtom.digitpermit.service;
 
 import devtom.digitpermit.Model.Tenant;
-import devtom.digitpermit.config.RabbitMqProducer;
+import devtom.digitpermit.event.RabbitMqProducer;
 import devtom.digitpermit.enums.Status;
 import devtom.digitpermit.repository.TenantRepository;
 import org.flywaydb.core.Flyway;
@@ -48,8 +48,6 @@ public class TenantService {
                     .baselineOnMigrate(true)
                     .load();
             flyway.migrate();
-
-            rabbitMqProducer.send("Tenant Created in DB: " + tenantId + "schema: " + schemaName);
 
         }catch (Exception e){
             try (Connection connection = dataSource.getConnection();

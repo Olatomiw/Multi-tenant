@@ -1,8 +1,15 @@
 package devtom.digitpermit.event;
 
+import lombok.*;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Builder
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class OutboxEventPayload {
 
     private UUID permitId;

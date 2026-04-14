@@ -1,6 +1,9 @@
 package devtom.digitpermit.service.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import devtom.digitpermit.Model.Applicant;
+import devtom.digitpermit.Model.OutboxEvent;
 import devtom.digitpermit.Model.PaymentRecord;
 import devtom.digitpermit.Model.Permit;
 import devtom.digitpermit.dtO.req.ApplicantRequestDto;
@@ -9,9 +12,13 @@ import devtom.digitpermit.dtO.req.PaymentVerificationRequest;
 import devtom.digitpermit.dtO.res.PaymentVerificationResponse;
 import devtom.digitpermit.dtO.res.PermitResponse;
 import devtom.digitpermit.dtO.res.PermitSummaryResponse;
+import devtom.digitpermit.enums.OutboxStatus;
 import devtom.digitpermit.enums.PaymentStatus;
 import devtom.digitpermit.enums.PermitStatus;
+import devtom.digitpermit.enums.Status;
+import devtom.digitpermit.event.OutboxEventPayload;
 import devtom.digitpermit.repository.ApplicantRepository;
+import devtom.digitpermit.repository.OutboxEventRepository;
 import devtom.digitpermit.repository.PaymentRecordRepository;
 import devtom.digitpermit.repository.PermitRepository;
 import devtom.digitpermit.service.PermitService;
@@ -27,6 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -44,6 +52,8 @@ public class PermitServiceImpl implements PermitService {
     private final PermitMappers permitMapper;
     private final PermitNumberGenerator permitNumberGenerator;
     private final PaymentGatewayClient paymentGatewayClient;
+    private final ObjectMapper objectMapper;
+    private final OutboxEventRepository outboxEventRepository;
 
     @Transactional
     @Override
@@ -53,6 +63,12 @@ public class PermitServiceImpl implements PermitService {
         Applicant applicant = findOrCreateApplicant(request.getApplicant());
         log.info("Applicant resolved: {} ({})", applicant.getNationalId(), applicant.getId());
 
+        Optional<Permit> byApplicantNationalIdAndPermitTypeAndStatus = permitRepository.findByApplicant_NationalIdAndPermitTypeAndStatus(applicant.getNationalId(), request.getPermitType(), PermitStatus.PENDING_PAYMENT);
+        if(byApplicantNationalIdAndPermitTypeAndStatus.isPresent()) {
+            log.warn("PermitType {} already exists. Skipping.", request.getPermitType());
+            Permit permit = byApplicantNationalIdAndPermitTypeAndStatus.get();
+            return permitMapper.toResponse(permit);
+        }
 
         PaymentVerificationResponse paymentResponse = verifyPayment(request, applicant);
         log.info("Payment verification result: {}", paymentResponse.getStatus());
@@ -66,6 +82,10 @@ public class PermitServiceImpl implements PermitService {
         PaymentRecord paymentRecord = buildPaymentRecord(permit, paymentResponse);
         paymentRecordRepository.save(paymentRecord);
 
+        // ── STEP 6: Save outbox event ─────────────────────────────────────
+        OutboxEvent outboxEvent = buildOutboxEvent(permit);
+        outboxEventRepository.save(outboxEvent);
+        log.info("OutboxEvent queued for permit: {}", permit.getId());
 
         PermitResponse response = permitMapper.toResponse(permit);
         response.setMessage(resolveResponseMessage(initialStatus));
@@ -155,6 +175,37 @@ public class PermitServiceImpl implements PermitService {
                 .status(PaymentStatus.valueOf(paymentResponse.getStatus()))
                 .gatewayResponse(paymentResponse.getMessage())
                 .attemptCount(1)
+                .createdAt(LocalDateTime.now())
+                .build();
+    }
+
+
+    private OutboxEvent buildOutboxEvent(Permit permit) {
+        OutboxEventPayload payload = OutboxEventPayload.builder()
+                .permitId(permit.getId())
+                .permitNumber(permit.getPermitNumber())
+                .permitType(permit.getPermitType().name())
+                .applicantName(permit.getApplicant().getFirstName()
+                        + " " + permit.getApplicant().getLastName())
+                .applicantNationalId(permit.getApplicant().getNationalId())
+                .status(permit.getStatus().name())
+                .timestamp(LocalDateTime.now())
+                .build();
+
+        String payloadJson;
+        try {
+            payloadJson = objectMapper.writeValueAsString(payload);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Failed to serialize outbox event payload", e);
+        }
+
+        return OutboxEvent.builder()
+                .aggregateId(permit.getId())
+                .aggregateType("PERMIT")
+                .eventType("PermitCreated")
+                .payload(payloadJson)
+                .status(OutboxStatus.PENDING)
+                .retryCount(0)
                 .createdAt(LocalDateTime.now())
                 .build();
     }
