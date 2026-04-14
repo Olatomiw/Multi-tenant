@@ -30,7 +30,7 @@ public class PaymentGatewayClient {
     @TimeLimiter(name = "permit-service")
     public CompletableFuture<PaymentVerificationResponse> verifyPayment(
             PaymentVerificationRequest request) {
-        String uri = paymentGatewayUrl+"/payments/verify";
+        String uri = paymentGatewayUrl+"api/payments/verify";
         return CompletableFuture.supplyAsync(() -> {
             log.info("Calling payment gateway for nationalId: {}", request.getNationalId());
 
@@ -39,7 +39,7 @@ public class PaymentGatewayClient {
                     request,
                     PaymentVerificationResponse.class
             );
-            log.info(paymentGatewayUrl + "/api/payments/verify", response.getBody());
+            log.info(paymentGatewayUrl + "api/payments/verify", response.getBody());
             log.info("Payment gateway responded with status: {}", response.getStatusCode());
             return response.getBody();
         });
