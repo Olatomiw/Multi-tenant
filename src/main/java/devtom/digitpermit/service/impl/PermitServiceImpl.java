@@ -95,7 +95,7 @@ public class PermitServiceImpl implements PermitService {
     }
 
 
-
+    @Override
     @Transactional(readOnly = true)
     public List<PermitSummaryResponse> getAllPermitsSummary() {
         return permitRepository.findAllWithApplicant()
