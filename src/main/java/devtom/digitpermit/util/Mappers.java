@@ -1,11 +1,8 @@
 package devtom.digitpermit.util;
 
-import devtom.digitpermit.Model.Applicant;
-import devtom.digitpermit.Model.Permit;
+import devtom.digitpermit.model.Applicant;
 import devtom.digitpermit.dtO.req.ApplicantRequestDto;
 import devtom.digitpermit.dtO.res.ApplicantResponse;
-import devtom.digitpermit.dtO.res.PermitResponse;
-import devtom.digitpermit.dtO.res.PermitSummaryResponse;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;

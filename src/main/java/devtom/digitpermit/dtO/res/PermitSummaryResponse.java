@@ -1,13 +1,15 @@
 package devtom.digitpermit.dtO.res;
 
 import devtom.digitpermit.enums.PermitStatus;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class PermitSummaryResponse {
     private UUID permitId;

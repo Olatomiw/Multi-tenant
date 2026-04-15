@@ -1,6 +1,6 @@
 package devtom.digitpermit.repository;
 
-import devtom.digitpermit.Model.Tenant;
+import devtom.digitpermit.model.Tenant;
 import devtom.digitpermit.enums.Status;
 import org.springframework.data.jpa.repository.JpaRepository;
 

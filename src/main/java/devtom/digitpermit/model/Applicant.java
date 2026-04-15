@@ -1,4 +1,4 @@
-package devtom.digitpermit.Model;
+package devtom.digitpermit.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;

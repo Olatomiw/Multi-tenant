@@ -2,12 +2,15 @@ package devtom.digitpermit.controller;
 
 import devtom.digitpermit.dtO.req.CreatePermitRequest;
 import devtom.digitpermit.dtO.res.PermitResponse;
+import devtom.digitpermit.dtO.res.PermitSummaryResponse;
 import devtom.digitpermit.service.PermitService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("api")
@@ -30,7 +33,8 @@ public class PermitController {
     }
 
     @GetMapping("/permits/summary")
-    public String permits(){
-        return "Permit";
+    public ResponseEntity<List<PermitSummaryResponse>> getAllPermitsSummary() {
+        List<PermitSummaryResponse> allPermitsSummary = permitService.getAllPermitsSummary();
+        return ResponseEntity.ok(allPermitsSummary);
     }
 }

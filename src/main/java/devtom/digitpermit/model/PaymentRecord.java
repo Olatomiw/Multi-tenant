@@ -1,7 +1,6 @@
-package devtom.digitpermit.Model;
+package devtom.digitpermit.model;
 
 import devtom.digitpermit.enums.PaymentStatus;
-import devtom.digitpermit.enums.Status;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

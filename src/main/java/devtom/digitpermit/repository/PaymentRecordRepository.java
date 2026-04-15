@@ -1,6 +1,6 @@
 package devtom.digitpermit.repository;
 
-import devtom.digitpermit.Model.PaymentRecord;
+import devtom.digitpermit.model.PaymentRecord;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

@@ -1,6 +1,6 @@
 package devtom.digitpermit.util;
 
-import devtom.digitpermit.Model.Permit;
+import devtom.digitpermit.model.Permit;
 import devtom.digitpermit.dtO.res.PermitResponse;
 import devtom.digitpermit.dtO.res.PermitSummaryResponse;
 import lombok.RequiredArgsConstructor;

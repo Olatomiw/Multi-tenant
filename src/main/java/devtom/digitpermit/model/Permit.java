@@ -1,10 +1,8 @@
-package devtom.digitpermit.Model;
+package devtom.digitpermit.model;
 
 import devtom.digitpermit.enums.PermitStatus;
 import devtom.digitpermit.enums.PermitType;
-import devtom.digitpermit.enums.Status;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.time.LocalDateTime;

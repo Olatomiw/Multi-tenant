@@ -1,6 +1,6 @@
 package devtom.digitpermit.service;
 
-import devtom.digitpermit.Model.Tenant;
+import devtom.digitpermit.model.Tenant;
 import devtom.digitpermit.event.RabbitMqProducer;
 import devtom.digitpermit.enums.Status;
 import devtom.digitpermit.repository.TenantRepository;

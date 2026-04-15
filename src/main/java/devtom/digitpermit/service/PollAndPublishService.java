@@ -1,6 +1,6 @@
 package devtom.digitpermit.service;
 
-import devtom.digitpermit.Model.OutboxEvent;
+import devtom.digitpermit.model.OutboxEvent;
 import devtom.digitpermit.enums.OutboxStatus;
 import devtom.digitpermit.event.RabbitMqProducer;
 import devtom.digitpermit.repository.OutboxEventRepository;
