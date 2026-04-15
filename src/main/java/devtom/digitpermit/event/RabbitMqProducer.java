@@ -3,7 +3,7 @@ package devtom.digitpermit.event;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import devtom.digitpermit.Model.OutboxEvent;
+import devtom.digitpermit.model.OutboxEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;

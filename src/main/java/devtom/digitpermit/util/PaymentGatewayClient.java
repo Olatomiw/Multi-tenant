@@ -41,6 +41,11 @@ public class PaymentGatewayClient {
             );
             log.info(paymentGatewayUrl + "api/payments/verify", response.getBody());
             log.info("Payment gateway responded with status: {}", response.getStatusCode());
+
+            if (!response.getStatusCode().is2xxSuccessful()) {
+                throw new RuntimeException("Payment failed");
+            }
+
             return response.getBody();
         });
     }

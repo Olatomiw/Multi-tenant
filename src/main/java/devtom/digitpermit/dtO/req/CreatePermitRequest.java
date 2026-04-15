@@ -9,7 +9,7 @@ import lombok.Value;
 import java.io.Serializable;
 
 /**
- * DTO for {@link devtom.digitpermit.Model.Permit}
+ * DTO for {@link devtom.digitpermit.model.Permit}
  */
 @Value
 public class CreatePermitRequest implements Serializable {

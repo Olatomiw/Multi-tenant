@@ -1,0 +1,21 @@
+{
+  "scenarioName": "payment-gateway",
+  "requiredScenarioState": "FAILURE_1",
+  "newScenarioState": "FAILURE_2",
+  "request": {
+    "method": "POST",
+    "url": "/api/payments/verify"
+  },
+  "response": {
+    "status": 503,
+    "fixedDelayMilliseconds": 3000,
+    "jsonBody": {
+      "id": "PAY-FAIL-001",
+      "status": "FAILED",
+      "message": "Service unavailable"
+    },
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

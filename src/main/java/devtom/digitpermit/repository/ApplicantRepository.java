@@ -1,6 +1,6 @@
 package devtom.digitpermit.repository;
 
-import devtom.digitpermit.Model.Applicant;
+import devtom.digitpermit.model.Applicant;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 

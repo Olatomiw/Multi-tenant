@@ -2,10 +2,10 @@ package devtom.digitpermit.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import devtom.digitpermit.Model.Applicant;
-import devtom.digitpermit.Model.OutboxEvent;
-import devtom.digitpermit.Model.PaymentRecord;
-import devtom.digitpermit.Model.Permit;
+import devtom.digitpermit.model.Applicant;
+import devtom.digitpermit.model.OutboxEvent;
+import devtom.digitpermit.model.PaymentRecord;
+import devtom.digitpermit.model.Permit;
 import devtom.digitpermit.dtO.req.ApplicantRequestDto;
 import devtom.digitpermit.dtO.req.CreatePermitRequest;
 import devtom.digitpermit.dtO.req.PaymentVerificationRequest;
@@ -15,7 +15,6 @@ import devtom.digitpermit.dtO.res.PermitSummaryResponse;
 import devtom.digitpermit.enums.OutboxStatus;
 import devtom.digitpermit.enums.PaymentStatus;
 import devtom.digitpermit.enums.PermitStatus;
-import devtom.digitpermit.enums.Status;
 import devtom.digitpermit.event.OutboxEventPayload;
 import devtom.digitpermit.repository.ApplicantRepository;
 import devtom.digitpermit.repository.OutboxEventRepository;
@@ -59,7 +58,6 @@ public class PermitServiceImpl implements PermitService {
     @Override
     public PermitResponse createPermit(CreatePermitRequest request) {
 
-        // ── STEP 1: Find or create the applicant ──────────────────────────
         Applicant applicant = findOrCreateApplicant(request.getApplicant());
         log.info("Applicant resolved: {} ({})", applicant.getNationalId(), applicant.getId());
 
@@ -106,10 +104,6 @@ public class PermitServiceImpl implements PermitService {
 
 
 
-
-
-
-
     private PaymentVerificationResponse verifyPayment(CreatePermitRequest request,
                                                       Applicant applicant) {
         try {
@@ -124,7 +118,9 @@ public class PermitServiceImpl implements PermitService {
                     .get(3, TimeUnit.SECONDS);
 
         } catch (Exception e) {
-            log.warn("Payment verification failed. Defaulting to PENDING. Cause: {}", e.getMessage());
+            log.warn("Payment verification failed. Type: {} Cause: {}",
+                    e.getClass().getSimpleName(),
+                    e.getMessage() != null ? e.getMessage() : "no message");
             return PaymentVerificationResponse.builder()
                     .id("TIMEOUT-" + UUID.randomUUID())
                     .status("PAYMENT_PENDING")

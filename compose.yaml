@@ -16,7 +16,9 @@ services:
       SPRING_RABBITMQ_PORT: 5672
       SPRING_RABBITMQ_USERNAME: guest
       SPRING_RABBITMQ_PASSWORD: guest
-      PAYMENT_URL: http://external-services-mock:8080/payment
+      SPRING_FLYWAY_USER: username
+      SPRING_FLYWAY_PASSWORD: password
+      PAYMENT_GATEWAY_URL: http://external-services-mock:8080/
 
     networks:
       - app-network

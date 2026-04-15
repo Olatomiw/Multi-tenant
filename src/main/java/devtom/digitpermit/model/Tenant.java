@@ -1,11 +1,10 @@
-package devtom.digitpermit.Model;
+package devtom.digitpermit.model;
 
 import devtom.digitpermit.enums.Status;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;

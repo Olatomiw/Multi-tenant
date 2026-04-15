@@ -1,0 +1,21 @@
+{
+  "scenarioName": "payment-gateway",
+  "requiredScenarioState": "SUCCESS_5",
+  "newScenarioState": "SUCCESS_6",
+  "request": {
+    "method": "POST",
+    "url": "/api/payments/verify"
+  },
+  "response": {
+    "status": 200,
+    "fixedDelayMilliseconds": 3000,
+    "jsonBody": {
+      "id": "PAY-002",
+      "status": "SUCCESS",
+      "message": "Payment verified"
+    },
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

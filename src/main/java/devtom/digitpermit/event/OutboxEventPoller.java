@@ -1,20 +1,15 @@
 package devtom.digitpermit.event;
 
-import devtom.digitpermit.Model.OutboxEvent;
-import devtom.digitpermit.Model.Tenant;
-import devtom.digitpermit.Model.TenantContext;
-import devtom.digitpermit.enums.OutboxStatus;
+import devtom.digitpermit.model.Tenant;
+import devtom.digitpermit.model.TenantContext;
 import devtom.digitpermit.enums.Status;
-import devtom.digitpermit.repository.OutboxEventRepository;
 import devtom.digitpermit.repository.TenantRepository;
 import devtom.digitpermit.service.PollAndPublishService;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Component

@@ -1,8 +1,7 @@
 package devtom.digitpermit.repository;
 
-import devtom.digitpermit.Model.OutboxEvent;
+import devtom.digitpermit.model.OutboxEvent;
 import devtom.digitpermit.enums.OutboxStatus;
-import devtom.digitpermit.event.OutboxEventPayload;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
